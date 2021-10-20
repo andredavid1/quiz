@@ -64,13 +64,20 @@ export default class QuestaoModel {
     return new QuestaoModel(this.#id, this.#enunciado, respostasEmbaralhadas, this.#acertou);
   }
 
+
+
+  static criarUsandoObjeto(obj): QuestaoModel {
+    const respostas = obj.respostas.map(resp => RespostaModel.criarUsandoObjeto(resp));
+    return new QuestaoModel(obj.id, obj.enunciado, respostas, obj.acertou)
+  }
+
   converterParaObjeto(){
     return {
       id: this.#id,
       enunciado: this.#enunciado,
       respondida: this.respondida,
       acertou: this.#acertou,
-      resposta: this.#respostas.map(resposta => resposta.converterParaObjeto()),
+      respostas: this.#respostas.map(resposta => resposta.converterParaObjeto()),
     }
   }
 }
