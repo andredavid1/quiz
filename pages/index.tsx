@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
+import router, { useRouter } from 'next/router';
 import Questionario from "../components/Questionario";
 import QuestaoModel from "../model/questao";
-import RespostaModel from "../model/resposta";
 
 const BASE_URL = 'http://localhost:3000/api'
 
 export default function Home() {
   const [idsDasQuestoes, setIdsDasQuestoes] = useState<number[]>([]);
   const [questao, setQuestao] = useState<QuestaoModel>();
+  const [respostasCertas, setRespostasCertas] = useState<number>(0);
 
   async function carregarIdsDasQuestoes() {
     const resp = await fetch(`${BASE_URL}/questionario`);
@@ -23,22 +24,47 @@ export default function Home() {
   }
 
   useEffect(() => {
-    carregarIdsDasQuestoes();
+    carregarIdsDasQuestoes();  
   }, []);
 
   useEffect(() => {
     idsDasQuestoes.length > 0 && carregarQuestao(idsDasQuestoes[0])
   }, [idsDasQuestoes]);
 
-  function questaoRespondida(questao: QuestaoModel) {
+  function questaoRespondida(questaoRespondida: QuestaoModel) {
+    setQuestao(questaoRespondida);
+    const acertou = questaoRespondida.acertou;
+    console.log("certas: ", respostasCertas, "novo: ", respostasCertas + (acertou ? 1 : 0))
+    setRespostasCertas(respostasCertas + (acertou ? 1 : 0));
+  }
 
+  function idProximaPergunta() {
+    const proximoIndice = idsDasQuestoes.indexOf(questao.id) + 1;
+  
+    return idsDasQuestoes[proximoIndice];
+    
+  }
+
+  function irParaProximaQuestao(proximoId: number) {
+    carregarQuestao(proximoId);
+  }
+
+  function finalizar() {
+    router.push({
+      pathname: "/resultado",
+      query: {
+        total: idsDasQuestoes.length,
+        certas: respostasCertas,
+      },
+    });
   }
 
   function irParaProximoPasso() {
-
+    const proximoId = idProximaPergunta();
+    proximoId ? irParaProximaQuestao(proximoId) : finalizar();
   }
 
-  return (
+  return questao ? (
     <div style={{
       display: 'flex',
       flexDirection: 'column',
@@ -48,10 +74,10 @@ export default function Home() {
     }}>
       <Questionario
         questao={questao}
-        ultima={false}
+        ultima={idProximaPergunta() === undefined}
         questaoRespondida={questaoRespondida}
         irParaPróximoPasso={irParaProximoPasso}
       />
     </div>
-  )
+  ) : false;
 }
