@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import router, { useRouter } from 'next/router';
+import router from 'next/router';
 import Questionario from "../components/Questionario";
 import QuestaoModel from "../model/questao";
 
@@ -34,15 +34,13 @@ export default function Home() {
   function questaoRespondida(questaoRespondida: QuestaoModel) {
     setQuestao(questaoRespondida);
     const acertou = questaoRespondida.acertou;
-    console.log("certas: ", respostasCertas, "novo: ", respostasCertas + (acertou ? 1 : 0))
     setRespostasCertas(respostasCertas + (acertou ? 1 : 0));
   }
 
   function idProximaPergunta() {
     const proximoIndice = idsDasQuestoes.indexOf(questao.id) + 1;
   
-    return idsDasQuestoes[proximoIndice];
-    
+    return idsDasQuestoes[proximoIndice];   
   }
 
   function irParaProximaQuestao(proximoId: number) {
