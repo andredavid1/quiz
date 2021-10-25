@@ -34,10 +34,7 @@ export default function Home() {
   function questaoRespondida(questaoRespondida: QuestaoModel) {
     setQuestao(questaoRespondida);
     const acertou = questaoRespondida.acertou;
-
-    (respostasCertas: number) => {    
-      setRespostasCertas(respostasCertas + (acertou ? 1 : 0));
-    }
+    setRespostasCertas(respostasCertas => respostasCertas + (acertou ? 1 : 0))
   }
 
   function idProximaPergunta() {
