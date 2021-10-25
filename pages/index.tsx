@@ -32,17 +32,10 @@ export default function Home() {
   }, [idsDasQuestoes]);
 
   function questaoRespondida(questaoRespondida: QuestaoModel) {
-<<<<<<< HEAD
     setQuestao(questaoRespondida);
     const acertou = questaoRespondida.acertou;
 
     () => {    
-=======
-    () => {
-      setQuestao(questaoRespondida);
-      const acertou = questaoRespondida.acertou;
-    
->>>>>>> 93e6114811b75f01dba1dd9c8cd1dcbcb6fa4c03
       setRespostasCertas(respostasCertas + (acertou ? 1 : 0));
     }
   }
