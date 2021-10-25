@@ -35,7 +35,7 @@ export default function Home() {
     setQuestao(questaoRespondida);
     const acertou = questaoRespondida.acertou;
 
-    () => {    
+    (respostasCertas: number) => {    
       setRespostasCertas(respostasCertas + (acertou ? 1 : 0));
     }
   }
